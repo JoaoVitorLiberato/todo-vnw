@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
 
-export const Container = styled.div`
-  width: 100%;
-  background-color: tomato;
-  height: 100vh;
+export const Container = styled.div``
+
+
+export const Title = styled.h1`
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
 `
 
 export const ContainerLimitador = styled.div`
@@ -32,6 +35,12 @@ export const ContainerInputs = styled.div`
     margin-right: 15px;
     border: none;
     border-radius: 10px;
+
+  }
+
+  @media(max-width:500px) {
+    width: 100%;
+    margin: 0 5px;
   }
 `
 
@@ -42,6 +51,8 @@ export const ContainerButton = styled.button`
 
   border: none;
   border-radius: 50%;
+  background-color: #fff;
+  transition:  0.8s ease-in-out;
 
 
   svg {
@@ -50,17 +61,52 @@ export const ContainerButton = styled.button`
     color: green;
   }
 
+  &:hover{
+    svg {
+    width: 30px;
+    height: 30px;
+    color: red;
+  }
+  }
+
 `
 
 export const ContainerList = styled.div`
   width: 100%;
-  height: 600px;
+  height: 300px;
   border-radius: 5px;
   padding: 10px;
   margin: 0 auto;
   overflow-y: scroll;
 
-  
+  ::-webkit-scrollbar{
+    width: 5px;
+  }
+  ::-webkit-scrollbar-thumb{
+      background-color: tomato;
+      border-radius: 10px;
+  }
+  ::-webkit-scrollbar-track{
+      background-color: black;
+  }
+
+  @media(max-width:500px) {
+    padding: 0;
+    margin-top: 40px;
+    ::-webkit-scrollbar{
+      width: 1px;
+    }
+
+    ::-webkit-scrollbar-track{
+      background-color: tomato;
+    }
+
+    ul {
+      margin: 0 5px;
+      padding-left: 0;
+    }
+  }
+
 `
 
 export const List = styled.li`
@@ -68,18 +114,19 @@ export const List = styled.li`
   align-items: center;
   justify-content: space-between;
   margin: 8px 0;
-  padding: 15px 0;
-  background-color: #83A3EE;
+  padding: 15px 20px;
+  background-color: ${(props) => props.color};
 
   input[type=checkbox] {
     margin-left: 5px;
   }
 
+  .ContainerConcluido {
+    opacity: .6;
+  }
+
   .concluido {
-    background-color: red;
-    strong {
-      text-decoration: underline;
-    }
+    text-decoration: line-through
   }
 `
 

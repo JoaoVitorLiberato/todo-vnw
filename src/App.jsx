@@ -1,6 +1,6 @@
 import { useState } from 'react'
+import ModalComponetent from "./components/Modal"
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 
 import {
   Container,
@@ -10,29 +10,28 @@ import {
   List,
   ContainerButton,
   ButtonList,
-  ContainerButtonList
+  ContainerButtonList,
+  Title
 } from './style'
 
 
 import { MdDelete, MdModeEditOutline, MdAdd } from "react-icons/md"
 
-function App() {
+export default function App() {
 
+  const [concluido, setConcluido] = useState(false)
   const [show, setShow] = useState(false);
   const [list, setList] = useState([])
+
   const [input, setInput] = useState({
     tarefa: "",
   })
+
   const [inputEdit, setInputEdit] = useState({
     novaTarefa: "",
   })
-  const [concluido, setConcluido] = useState(false)
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
- 
-  
   const handleAddTarefa = () => {
 
     if(input.tarefa !== "" || input.tarefa.length >= 2) {
@@ -40,6 +39,7 @@ function App() {
         {
           ...input.tarefa,
           id: Math.random(),
+          concluido: false,
           tarefa: input.tarefa,
         }
         ))
@@ -47,6 +47,11 @@ function App() {
       }
     }
 
+    const handleConcluirTarefa = (id) => {
+      list.filter(item => {
+        setConcluido(item === id ? true : false)
+      })
+    }
     
     const handleEditTarefa = (id) => {
       const novaLista = list.map(item => {
@@ -56,10 +61,13 @@ function App() {
             tarefa: inputEdit.novaTarefa
           }
         }
-        return item
+        if(item) return item
       })
 
-      setList(novaLista)
+      if(inputEdit.novaTarefa !== "" || inputEdit.novaTarefa.length >= 2) {
+        setList(novaLista)
+      }
+
       inputEdit.novaTarefa = ""
 
     }
@@ -71,8 +79,11 @@ function App() {
   return (
     <Container>
       <ContainerLimitador>
+        <Title>
+          Lista de Tarefas
+        </Title>
         <ContainerInputs>
-          <input 
+          <input
             type="text"
             placeholder='Digite uma tarefa'
             name='task'
@@ -88,23 +99,28 @@ function App() {
         <ContainerList>
           <ul>
             {
-              list.map((item, index) => (
+              list.map((item) => (
                 <List
-                  className={`${concluido&&'concluido'} animate__animated animate__pulse`}
-                  key={`tarefa-${index}`}
+                  className={`animate__animated animate__bounceInLeft ${concluido === true ?"ContainerConcluido":""}`}
+                  onClick={() => handleConcluirTarefa(item.id)}
+                  key={`tarefa-${item.id}}`}
+                  color={concluido? "#83a3ee61": "#83A3EE"}
+                  
                 >
                   <input 
                     type="checkbox"
-                    value={concluido}
-                    onClick={() => setConcluido(!concluido)}
+                    value={item.concluido}
+                    onClick={() => handleConcluirTarefa(item.id)}
                   />
-                  <strong>
+                  <strong
+                    className={concluido === true ?"concluido":""}
+                  >
                     {
                       item.tarefa
                     }
                   </strong>
                   <ContainerButtonList>
-                    <ButtonList onClick={handleShow}>
+                    <ButtonList onClick={() => setShow(true)}>
                       <MdModeEditOutline />
                     </ButtonList>
                     <ButtonList
@@ -113,40 +129,38 @@ function App() {
                       <MdDelete />
                     </ButtonList>
                   </ContainerButtonList>
-                  <Modal show={show} onHide={handleClose}>
-                    <Modal.Header>
-                      <Modal.Title>Editar tarefa</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                    <input 
-                        type="text"
-                        placeholder='Digite uma tarefa'
-                        name='task'
-                        value={inputEdit.novaTarefa}
-                        onChange={(e) => setInputEdit({ ...inputEdit, novaTarefa: e.target.value })} 
-                      />
-                      <ContainerButton
-                        onClick={() => handleEditTarefa(item.id)}
-                      >
-                        Confirmar
-                      </ContainerButton>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="secondary" onClick={handleClose}>
-                        Close
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
+                  <ModalComponetent
+                    title="Editar tarefa"
+                    show={show}
+                    close={() => setShow(false)}
+                  >
+                    <input
+                      type="text"
+                      placeholder='Digite uma tarefa'
+                      name='task'
+                      value={inputEdit.novaTarefa}
+                      onChange={(e) => setInputEdit({ ...inputEdit, novaTarefa: e.target.value })} 
+                    />
+                    <Button 
+                      className='mx-2'
+                      variant="danger"
+                      onClick={() => handleEditTarefa(item.id)}
+                    >
+                      Editar Tarefa
+                    </Button>
+                    <Button 
+                      variant="secondary"
+                      onClick={() => setShow(false)}
+                    >
+                      Cancelar
+                    </Button>
+                  </ModalComponetent>
                 </List>
               ))
             }
           </ul>
         </ContainerList>
       </ContainerLimitador>
-      <>
-    </>
     </Container>
   )
 }
-
-export default App
