@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
+  background-color: tomato;
+  height: 100vh;
 `
 
 export const ContainerLimitador = styled.div`
@@ -16,6 +18,7 @@ export const ContainerLimitador = styled.div`
 `
 
 export const ContainerInputs = styled.div`
+  position: relative;
   width: 500px;
   margin: 0 auto 60px;
 
@@ -27,11 +30,19 @@ export const ContainerInputs = styled.div`
     padding: 15px;
     width: 100%;
     margin-right: 15px;
+    border: none;
+    border-radius: 10px;
   }
 `
 
 export const ContainerButton = styled.button`
-  padding: 10px 20px;
+  position: absolute;
+  top: 14px;
+  right: 28px;
+
+  border: none;
+  border-radius: 50%;
+
 
   svg {
     width: 20px;
@@ -42,20 +53,34 @@ export const ContainerButton = styled.button`
 `
 
 export const ContainerList = styled.div`
-  width: 500px;
-  border: 1px solid red;
+  width: 100%;
+  height: 600px;
   border-radius: 5px;
   padding: 10px;
   margin: 0 auto;
+  overflow-y: scroll;
+
+  
 `
 
-export const List = styled.div`
+export const List = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 8px 0;
-  padding-bottom: 2px;
-  border-bottom: 2px solid gray;
+  padding: 15px 0;
+  background-color: #83A3EE;
+
+  input[type=checkbox] {
+    margin-left: 5px;
+  }
+
+  .concluido {
+    background-color: red;
+    strong {
+      text-decoration: underline;
+    }
+  }
 `
 
 export const ContainerButtonList = styled.div`

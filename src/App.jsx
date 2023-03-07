@@ -13,8 +13,8 @@ import {
   ContainerButtonList
 } from './style'
 
-import { BsSearchHeart } from "react-icons/bs"
-import { MdDelete, MdModeEditOutline } from "react-icons/md"
+
+import { MdDelete, MdModeEditOutline, MdAdd } from "react-icons/md"
 
 function App() {
 
@@ -26,37 +26,47 @@ function App() {
   const [inputEdit, setInputEdit] = useState({
     novaTarefa: "",
   })
+  const [concluido, setConcluido] = useState(false)
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+ 
+  
   const handleAddTarefa = () => {
-    setList(list.concat(
-      {
-        ...input.tarefa,
-        id: Math.random(),
-        tarefa: input.tarefa,
+
+    if(input.tarefa !== "" || input.tarefa.length >= 2) {
+      setList(list.concat(
+        {
+          ...input.tarefa,
+          id: Math.random(),
+          tarefa: input.tarefa,
+        }
+        ))
+        input.tarefa = ""
       }
-      ))
-      input.tarefa = ""
     }
+
     
     const handleEditTarefa = (id) => {
-      setList(list.filter(item => item.id === id))
+      const novaLista = list.map(item => {
+        if(item.id === id) {
+          return {
+            ...item,
+            tarefa: inputEdit.novaTarefa
+          }
+        }
+        return item
+      })
+
+      setList(novaLista)
+      inputEdit.novaTarefa = ""
+
     }
     
     const handleRemoveTarefa = (id) => {
-      setList(list.filter(item => {
-        if (item.id === id) {
-          setInput({
-            ...input.tarefa,
-            tarefa: inputEdit.novaTarefa
-          })
-        }
-      }))
+      setList(list.filter(item => item.id !== id))
     }
-
-    console.log(list)
 
   return (
     <Container>
@@ -72,7 +82,7 @@ function App() {
           <ContainerButton
             onClick={handleAddTarefa}
           >
-            <BsSearchHeart />
+            <MdAdd/>
           </ContainerButton>
         </ContainerInputs>
         <ContainerList>
@@ -80,9 +90,14 @@ function App() {
             {
               list.map((item, index) => (
                 <List
+                  className={`${concluido&&'concluido'} animate__animated animate__pulse`}
                   key={`tarefa-${index}`}
                 >
-                  <input type="checkbox" />
+                  <input 
+                    type="checkbox"
+                    value={concluido}
+                    onClick={() => setConcluido(!concluido)}
+                  />
                   <strong>
                     {
                       item.tarefa
@@ -99,7 +114,7 @@ function App() {
                     </ButtonList>
                   </ContainerButtonList>
                   <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                       <Modal.Title>Editar tarefa</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
